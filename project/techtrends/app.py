@@ -59,7 +59,7 @@ def create():
         if not title:
             flash('Title is required!')
         else:
-            app.logger.info(f'Article "{post["title"]}" is created')
+            app.logger.info(f'Article "{title}" is created')
             connection = get_db_connection()
             connection.execute('INSERT INTO posts (title, content) VALUES (?, ?)',
                          (title, content))
