@@ -1,3 +1,4 @@
+import logging
 import sqlite3
 
 from flask import Flask, jsonify, json, render_template, request, url_for, redirect, flash
@@ -36,13 +37,16 @@ def index():
 def post(post_id):
     post = get_post(post_id)
     if post is None:
+      app.logger.info(f'Unknown article is retrieved')
       return render_template('404.html'), 404
     else:
+      app.logger.info(f'Article "{post["title"]}" is retrieved')
       return render_template('post.html', post=post)
 
 # Define the About Us page
 @app.route('/about')
 def about():
+    app.logger.info('About page is retrieved')
     return render_template('about.html')
 
 # Define the post creation functionality 
@@ -55,6 +59,7 @@ def create():
         if not title:
             flash('Title is required!')
         else:
+            app.logger.info(f'Article "{post["title"]}" is created')
             connection = get_db_connection()
             connection.execute('INSERT INTO posts (title, content) VALUES (?, ?)',
                          (title, content))
@@ -79,7 +84,6 @@ def metrics():
     connection = get_db_connection()
     post_count_row = connection.execute('SELECT COUNT(*) FROM posts').fetchone()
     post_count = post_count_row['count(*)']
-    print(post_count)
     connection.close()
     response = app.response_class(
         response = json.dumps({'db_connection_count': 1, 'post_count': post_count}),
@@ -90,4 +94,5 @@ def metrics():
 
 # start the application on port 3111
 if __name__ == "__main__":
-   app.run(host='0.0.0.0', port='3111')
+  logging.basicConfig(format='%(levelname)s : %(asctime)s : %(message)s', level=logging.DEBUG) 
+  app.run(host='0.0.0.0', port='3111')
