@@ -74,6 +74,20 @@ def heathz():
     )
     return response
 
+@app.route('/metrics')
+def metrics():
+    connection = get_db_connection()
+    post_count_row = connection.execute('SELECT COUNT(*) FROM posts').fetchone()
+    post_count = post_count_row['count(*)']
+    print(post_count)
+    connection.close()
+    response = app.response_class(
+        response = json.dumps({'db_connection_count': 1, 'post_count': post_count}),
+        status = 200,
+        mimetype = 'application/json'
+    )
+    return response
+
 # start the application on port 3111
 if __name__ == "__main__":
    app.run(host='0.0.0.0', port='3111')
