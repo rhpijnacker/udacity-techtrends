@@ -4,3 +4,6 @@
 .myvenv/
 __pycache__/
 .vagrant/
+Lib
+Scripts
+pyvenv.cfg
