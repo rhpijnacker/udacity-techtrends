@@ -22,7 +22,7 @@ jobs:
       - name: Build and Push
         uses: docker/build-push-action@v3
         with:
-          context: project
+          context: "{{defaultContext}}:project"
           file: ./Dockerfile
           platforms: linux/amd64
           tags: rhpijnacker/techtrends:latest
