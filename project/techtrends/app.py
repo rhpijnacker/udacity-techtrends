@@ -41,10 +41,10 @@ def index():
 def post(post_id):
     post = get_post(post_id)
     if post is None:
-      app.logger.info(f'Unknown article is retrieved')
+      app.logger.error('Unknown article is retrieved')
       return render_template('404.html'), 404
     else:
-      app.logger.info(f'Article "{post["title"]}" is retrieved')
+      app.logger.info('Article "%s" is retrieved', post['title'])
       return render_template('post.html', post=post)
 
 # Define the About Us page
